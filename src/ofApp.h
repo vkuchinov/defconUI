@@ -55,7 +55,7 @@ class ofApp : public ofBaseApp{
         ofSoundPlayer soundtrack;
         float volume = 0.25;
         bool soundtrackPause = false;
-	int trackNum = 1;
+        int trackNum = 1;
     
         //stage A: administrator
         ofImage initScreen;
@@ -67,13 +67,18 @@ class ofApp : public ofBaseApp{
         ofFbo* interface;
 
         ofImage background;
-	ofImage backgroundRed;
+        ofImage backgroundRed;
 
-	ofImage overLights;
-	ofImage overLightsRed;
+        ofImage overLights;
+        ofImage overLightsRed;
 
-  	int uiState = 1;
-	int falsePassword = 0;
+        int uiState = 1;
+        int falsePassword = 0;
+
+        //defconUI20
+        int record;
+        ofxTrueTypeFontUC firaRegular;
+        //defconUI20
 
 	ofVec2f lightsTurnRed [7] = {{3540, 3535}, {3000, 2995}, {2400, 2395}, {1800, 1795}, {1200, 1195}, {600, 595}, {300, 0}};
 	int red = 0;

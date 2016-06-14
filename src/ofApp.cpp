@@ -70,6 +70,11 @@ void ofApp::setup(){
     winMessage.load("assets/win.png");
 
     controls.inits();
+
+    //defconUI20
+    firaRegular.load("typefaces/FiraMonoRegular.ttf", 32, true, true);
+    //defconUI20
+
 }
 
 //--------------------------------------------------------------
@@ -389,6 +394,21 @@ void ofApp::draw(){
         ofSetColor(255, 255, 255, 255);
         
         winMessage.draw(0, 0);
+
+        //defconUI20
+
+        string caption = "YOUR ЯECORD TIME: ";
+        string minutes = ofToString((int)record/60);
+        if(minutes.length() == 1) minutes = "0" + minutes;
+        string seconds = ofToString(record%60);
+        if(seconds.length() == 1) seconds = "0" + seconds;
+        string percent = ofToString(roundf(record/3.550)/10.0);
+
+        caption += minutes + ":" + seconds + " (" + percent + "%)";
+
+        firaRegular.drawString(caption, 580, 900);
+
+        //defconUI20
         
         overLights.draw(0, 0);
 
@@ -416,6 +436,10 @@ void ofApp::youWin(){
     stages[1].active = false; stages[2].done = true; stages[4].active = true;
     soundtrack.setPaused(true);
     soundtrackPause = true;
+
+    //defconUI20
+    record = (3550 - countdown.getTimeLeftInSeconds());
+    //defconUI20
     
 }
 
