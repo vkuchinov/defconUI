@@ -307,6 +307,7 @@ void ofApp::draw(){
     keyboard.draw(joy.x, joy.y, soundtrack.isPlaying());
 
     ofSetColor(255, 255, 255, 255);
+    ofDrawBitmapString("joystick debouncing limit:" + ofToString(controls.debounceLimit), 48, 48);
 
     //joystick poiner
     //ofDrawRectangle(joy.x, joy.y - 7, 2, 16);
@@ -482,10 +483,10 @@ void ofApp::keyPressed(int key){
     //if (key == char(109) || key == char(77)){ if(soundtrack.isPlaying()) soundtrack.stop(); else soundtrack.play(); }
     
     // 'LEFT
-    //if (key == OF_KEY_LEFT && volume > 0.0 ){  volume -= 0.05; soundtrack.setVolume(volume); }
+    if (key == OF_KEY_LEFT && controls.debounceLimit > 1 ){  controls.debounceLimit--; }
 
     // RIGHT
-    //if (key == OF_KEY_RIGHT && volume <0.8 ){  volume += 0.05; soundtrack.setVolume(volume); }
+    if (key == OF_KEY_RIGHT && controls.debounceLimit < 128 ){  controls.debounceLimit++; }
 
 }
 

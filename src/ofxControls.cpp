@@ -46,6 +46,9 @@ void ofxControls::inits() {
 void ofxControls::update() {
 
 	//joystick
+
+    if(joystickDebouncing < 0){
+
 	if(joystick.getAxisNum() == 0){ x += joystick.getAxisValue()*0.001;
 	if(x < minX) x = minX;
 	if(x > maxX) x = maxX;
@@ -56,6 +59,8 @@ void ofxControls::update() {
 	if(y > maxY) y = maxY;
 	jY = ofMap(joystick.getAxisValue(), -32767, 32767, 0, ofGetHeight());
 	}
+
+    }
 
 	if(joystick.getButtonNum() == 0 && joystick.getButtonValue() == 1 && pauseJoystick < 0) { joystickButton = true; pauseJoystick = 10; }
 
@@ -72,6 +77,14 @@ void ofxControls::update() {
 	if(state24 == "0" && pause24 < 0) { active24 = true; pause24 = 10; } else { active24 = false; }
 
 	pauseJoystick--; pause18--; pause24--;
+
+    joystickDebouncing--;
+
+}
+
+void ofxControls::debounce(){
+
+    joystickDebouncing = debounceLimit;
 
 }
 

@@ -37,8 +37,8 @@ void ofxKeyboard::draw(int mX_, int mY_, bool state_) {
     for(int c = 0; c < INPUT2.size(); c++) inputParser += map[INPUT2[c]].key;
     firaRegular.drawString(inputParser, 1069, 660);
     
-    if(lastJX != mX_){ if(mX_ > lastJX) { incrementX = 1; } else { incrementX = -1; }}
-    if(lastJY != mY_){ if(mY_ > lastJY) { incrementY = 1; } else { incrementY = -1; }}
+    if(lastJX != mX_){ if(mX_ > lastJX) { incrementX = 1; } else { incrementX = -1; } app->controls.debounce(); }
+    if(lastJY != mY_){ if(mY_ > lastJY) { incrementY = 1; } else { incrementY = -1; } app->controls.debounce(); }
 
     //x: Y (0, 1, 2) rows, y; X: (0 ... 11) columns
     if(incrementY < 0 && active.x > 0) active.x += -1;
