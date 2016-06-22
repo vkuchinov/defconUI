@@ -49,12 +49,12 @@ void ofxControls::update() {
 
     if(joystickDebouncing < 0){
 
-	if(joystick.getAxisNum() == 0){ x += joystick.getAxisValue()*0.001;
+	if(joystick.getAxisNum() == 0){ x += joystick.getAxisValue()*joystickSensitivity;
 	if(x < minX) x = minX;
 	if(x > maxX) x = maxX;
 	jX = ofMap(joystick.getAxisValue(), -32767, 32767, 0, ofGetWidth());
 	}
-	if(joystick.getAxisNum() == 1){ y += joystick.getAxisValue()*0.001;  
+	if(joystick.getAxisNum() == 1){ y += joystick.getAxisValue()*joystickSensitivity;  
 	if(y < minY) y = minY;
 	if(y > maxY) y = maxY;
 	jY = ofMap(joystick.getAxisValue(), -32767, 32767, 0, ofGetHeight());

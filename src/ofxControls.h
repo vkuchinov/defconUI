@@ -26,6 +26,7 @@ public:
     int debounceLimit = 4; //joystick movement debouncing, in frames
     int joystickDebouncing = debounceLimit;
     int joystickPause = 0;
+    float joystickSensitivity = 0.001;
 
     //-1: center, 0:north, 1:west, 2: south, 3:east
     int currentDirection = -1;

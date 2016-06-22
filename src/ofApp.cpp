@@ -307,7 +307,7 @@ void ofApp::draw(){
     keyboard.draw(joy.x, joy.y, soundtrack.isPlaying());
 
     ofSetColor(255, 255, 255, 255);
-    ofDrawBitmapString("joystick debouncing limit:" + ofToString(controls.debounceLimit), 48, 48);
+    ofDrawBitmapString("joystick debouncing:" + ofToString(controls.debounceLimit) + ", sensitivity: " + ofToString(controls.joystickSensitivity), 48, 48);
 
     //joystick poiner
     //ofDrawRectangle(joy.x, joy.y - 7, 2, 16);
@@ -482,12 +482,19 @@ void ofApp::keyPressed(int key){
     // 'M' or 'm' is pressed
     //if (key == char(109) || key == char(77)){ if(soundtrack.isPlaying()) soundtrack.stop(); else soundtrack.play(); }
     
-    // 'LEFT
+    // LEFT
     if (key == OF_KEY_LEFT && controls.debounceLimit > 1 ){  controls.debounceLimit--; }
 
     // RIGHT
     if (key == OF_KEY_RIGHT && controls.debounceLimit < 128 ){  controls.debounceLimit++; }
 
+    // UP
+    if (key == OF_KEY_UP && controls.joystickSensitivity > 0.05 ){ controls.joystickSensitivity += 0.0002; }
+    
+    // DOWN
+    if (key == OF_KEY_DOWN && controls.joystickSensitivity > 0.0001 ){  controls.debounceLimit -= 0.0002;; }
+
+    
 }
 
 //--------------------------------------------------------------
