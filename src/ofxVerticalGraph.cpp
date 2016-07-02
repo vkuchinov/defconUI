@@ -14,7 +14,7 @@ void ofxVerticalGraph::inits(ofVec3f position_, int width_, int height_) {
     }
 
     sprite = new ofFbo();
-    sprite->allocate(width, height, GL_RGB );
+    sprite->allocate(width, height, GL_RGBA );
     
 }
 
@@ -26,20 +26,34 @@ void ofxVerticalGraph::update(int frames_) {
         values.push_back(ofNoise(ofGetElapsedTimeMillis(), 0));
     }
 
+    updated = true;
+
 }
 
 void ofxVerticalGraph::draw() {
     
-    ofSetColor(green, 255);
+
+    if(updated) { 
+
+    sprite->begin();
+    ofClear(255, 0);
+
+    ofSetColor(green, 255);   
 
     for(int c = 0; c < COLUMNS; c++){
 
         float columnHeight = ofMap(values[c], 0.0, 1.0, -4.0, -68.0);
-        ofDrawRectangle(position.x + c * 12.55, position.y + height, 9, columnHeight);
-        ofDrawRectangle(position.x + c * 12.55, position.y + height + columnHeight - 3, 9, -6.0);
+        ofDrawRectangle(c * 12.55, height, 9, columnHeight);
+        ofDrawRectangle(c * 12.55, height + columnHeight - 3, 9, -6.0);
 
     }
 
+    sprite->end();
+    updated = false;
+    }
 
+    ofSetColor(green, 255);
+
+    sprite->draw(position.x, position.y);
     
 }

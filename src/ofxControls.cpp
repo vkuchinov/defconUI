@@ -35,6 +35,12 @@ void ofxControls::inits() {
     //ofLog()<<"original joystick Y is";
     //ofLog()<<y;
 
+    if(joystick.getAxisNum() == 0){ lastJoystickValues.x = joystick.getAxisValue(); }
+    if(joystick.getAxisNum() == 1){ lastJoystickValues.y = joystick.getAxisValue(); }
+
+    millisA = ofGetElapsedTimeMillis();
+    millisB = ofGetElapsedTimeMillis();
+
     //GPIO
     gpio18.setup("18"); gpio18.export_gpio(); gpio18.setdir_gpio("in");
 	gpio23.setup("23"); gpio23.export_gpio(); gpio23.setdir_gpio("in");
@@ -64,8 +70,8 @@ void ofxControls::update() {
 
 	if(joystick.getButtonNum() == 0 && joystick.getButtonValue() == 1 && pauseJoystick < 0) { joystickButton = true; pauseJoystick = 10; }
 
-	//ofApp* app = dynamic_cast<ofApp*>(ofGetAppPtr());
-    //app->stopCountdown();
+	ofApp* app = dynamic_cast<ofApp*>(ofGetAppPtr());
+        //app->stopCountdown();
 
 	//GPIO
 	gpio18.getval_gpio(state18);
@@ -79,6 +85,48 @@ void ofxControls::update() {
 	pauseJoystick--; pause18--; pause24--;
 
     joystickDebouncing--;
+
+    if(joystick.getAxisNum() == 0){ joystickValues.x = joystick.getAxisValue(); }
+       if(joystick.getAxisNum() == 1){ joystickValues.y = joystick.getAxisValue(); }
+
+       if((ofGetElapsedTimeMillis() - millisA) > pauseAxes){
+
+           if(abs(joystickValues.x) > abs(joystickValues.y)){
+
+               //X
+               if(abs(joystickValues.x) > 13784){
+
+                   if(joystickValues.x < 0 && activeKey.x > 0) { activeKey.x--; }
+                   if(joystickValues.x > 0 && activeKey.x < 11) { activeKey.x++; }
+               }
+
+           }
+           else{
+
+               //Y
+               if(abs(joystickValues.y) > 13784){
+
+                   if(joystickValues.y < 0 && activeKey.y > 0) { activeKey.y--; }
+                   if(joystickValues.y > 0 && activeKey.y < 2) { activeKey.y++; }
+
+               }
+
+           }
+
+           lastJoystickValues = joystickValues;
+           millisA = ofGetElapsedTimeMillis();
+
+       }
+
+
+        //corrections
+        if(!app->passwordBox() && activeKey.y == 0 && activeKey.x == 11) { activeKey.y = 0; activeKey.x = 10; }
+        if(activeKey.y == 1 && activeKey.x == 11) { activeKey.y = 1; activeKey.x = 10; }
+        if(activeKey.y == 2 && activeKey.x == 10 ) { if(activeKey.x > lastKey.x) { activeKey.x = 11; } else { activeKey.x = 9; } }
+
+       if(joystick.getButtonNum() == 0 && joystick.getButtonValue() == 1 && (ofGetElapsedTimeMillis() - millisB) > pauseButton) { button = true; millisB = ofGetElapsedTimeMillis(); } else { button = false; }
+
+       lastKey = activeKey;
 
 }
 

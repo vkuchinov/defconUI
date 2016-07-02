@@ -26,6 +26,8 @@ class ofApp : public ofBaseApp{
         void youAreDefeated();
         void youWin();
 	void setFalsePassword();
+
+ 	bool passwordBox();
 		
 		void keyPressed(int key);
 		void keyReleased(int key);

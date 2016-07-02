@@ -15,7 +15,9 @@ public:
     void checkPassword();
     void keyPressed(int mX_, int mY_);
     void mouseMoved(int x, int y);
-    void mousePressed(int mX_, int mY_);
+    void mousePressed(ofVec2f key_);
+
+    void draw(ofVec2f key_, bool active_);
 
     bool ACTIVE = false;
     
@@ -52,8 +54,13 @@ public:
     //last joydstick position
     int lastJX = 0;
     int lastJY = 0;
-
     
+    int lastC = 0;
+
+    int rows = 3;
+    int cols = 12;
+
+
     //1, 5
     ofVec2f active;
   

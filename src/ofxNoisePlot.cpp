@@ -19,8 +19,7 @@ void ofxNoisePlot::inits(ofVec3f position_, int width_, int height_, float mouse
     }
     
     sprite = new ofFbo();
-    sprite->allocate(width, height, GL_RGB );
-
+    sprite->allocate(width, height, GL_RGBA );
 }
 
 
@@ -36,20 +35,38 @@ void ofxNoisePlot::update(float mouseX_) {
 
     //sprite->end();
     //ofDisableAlphaBlending();
+
+    updated = true;
     
 }
 
 void ofxNoisePlot::draw() {
 
-    ofSetColor(green, 255);
 
+    if(updated) { 
+
+
+    //sprite->clear();
+
+    sprite->begin();
+    ofClear(255, 0);
+
+    ofSetColor(green, 255);   
     for(int v = 0; v < values.size(); v++){
 
-    ofDrawRectangle(position.x + v, position.y, 1,  values[v] * 16.0);
-    ofDrawRectangle(position.x + v, position.y, 1, -values[v] * 16.0);
+    ofDrawRectangle(v, height/2, 1,  values[v] * 16.0);
+    ofDrawRectangle(v, height/2, 1, -values[v] * 16.0);
 
     }
 
-    //sprite->draw(position.x, position.y - height/2);
+    sprite->end();
+    updated = false;
+    }
+    ofSetColor(green, 255);
+
+   //ofDrawRectangle(200, 174, width, height);
+
+   
+   sprite->draw(position.x, position.y - height/2);
 
 }

@@ -22,4 +22,8 @@ public:
 
     ofImage highlight;
 
+    ofColor green = ofColor(38, 170, 92);
+
+    bool updated = true;
+
 };

@@ -21,6 +21,8 @@ public:
     
     vector<float> values;
     
-    ofColor green = ofColor(124, 144, 24, 192);
+    ofColor green = ofColor(38, 170, 92);
+
+    bool updated = true;
     
 };

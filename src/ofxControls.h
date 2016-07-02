@@ -21,6 +21,23 @@ public:
     bool getKeyState();
     bool getEnterButtonState();    
     
+    long millisA;
+    long millisB;
+
+    int xy = 0; //0:center, -1: west, 1:east, -2: south, 2: north
+
+    ofVec2f activeKey = ofVec2f(6, 1);
+    ofVec2f lastKey = activeKey;
+
+    ofxJoystick joystick;
+
+    ofVec2f lastJoystickValues;
+    ofVec2f joystickValues;
+
+    bool button;
+    int pauseButton = 500;
+    int pauseAxes = 500;
+
     void setEnterButtonToInactive();
 
     int debounceLimit = 4; //joystick movement debouncing, in frames
@@ -32,7 +49,6 @@ public:
     int currentDirection = -1;
 
 
-    ofxJoystick joystick;
     bool joystickButton = false;
     int x, y, minX, maxX, minY, maxY, jX, jY;
     int pauseJoystick = 0;

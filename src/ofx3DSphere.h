@@ -27,4 +27,8 @@ public:
     float theta, phi;
     ofVec3f points[32][32];
 
+    bool updated = true;
+
+    ofColor green = ofColor(124, 144, 24, 192);
+
 };

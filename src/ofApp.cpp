@@ -9,6 +9,8 @@ void ofApp::setup(){
     ofSetVerticalSync(true);
     ofHideCursor();
     
+    ofSetLogLevel(OF_LOG_VERBOSE);
+
     //soundtrack
     //string urls = "mp3s/soundtrack/" + ofToString(1 + (int)ofRandom(21)) + ".mp3";
     string urls = "mp3s/soundtrack/" + ofToString(trackNum) + ".mp3";
@@ -20,10 +22,7 @@ void ofApp::setup(){
     //stage A: administrator
  
     initScreen.load("assets/turnTheKey.jpg");
-    redButtonMovie.load("videos/redButtonMovie.mov");
-    redButtonMovie.setLoopState(OF_LOOP_NONE);
-    redButtonMovie.setPosition(0.0);
-    redButtonMovie.setPaused(true);
+
 
     //stage B: main interface
 
@@ -109,7 +108,7 @@ void ofApp::update(){
         	stages[0].active = false; stages[0].done = true;
         	stages[1].active = true;
 
-        	soundtrack.setPaused(false);
+            soundtrack.setPaused(false);
 
         	//resetting timer
         	countdown.setZeroPoint();
@@ -127,14 +126,16 @@ void ofApp::update(){
 
     if(stages[1].active) {
 
-	if(!soundtrack.isPlaying() && !soundtrackPause) {
+        if(!soundtrack.isPlaying() && !soundtrackPause) {
 
-	    if(trackNum < 21) { trackNum++; } else { trackNum = 1; }
-            string urls = "mp3s/soundtrack/" + ofToString(trackNum) + ".mp3";
-            soundtrack.load(urls, true);
-            if(soundtrack.isLoaded()) { soundtrack.play(); }
+            if(trackNum < 21) { trackNum++; } else { trackNum = 1; }
+                string urls = "mp3s/soundtrack/" + ofToString(trackNum) + ".mp3";
+                soundtrack.load(urls, true);
+                if(soundtrack.isLoaded()) { soundtrack.play(); }
 
-        }
+            }
+
+    if(countdown.getTimeLeftInSeconds() < 60 && soundtrack.isPlaying()) soundtrack.stop();
 
     	if(controls.active23){
 
@@ -145,7 +146,7 @@ void ofApp::update(){
 
     	}
 
-	if(frameCount % 30) { countdown.update(); }
+	countdown.update();
    
     	frameCount++;
 
@@ -161,16 +162,16 @@ void ofApp::update(){
     //stage B: main interface
     if(stages[2].active){
     
+
         if(!soundtrack.isPlaying() && !soundtrackPause) {
 
             if(trackNum < 21) { trackNum++; } else { trackNum = 1; }
-            string urls = "mp3s/soundtrack/" + ofToString(trackNum) + ".mp3";
-            soundtrack.load(urls, true);
-            if(soundtrack.isLoaded()) { soundtrack.play(); }
+                string urls = "mp3s/soundtrack/" + ofToString(trackNum) + ".mp3";
+                soundtrack.load(urls, true);
+                if(soundtrack.isLoaded()) { soundtrack.play(); }
 
-        }
+            }
 
-    if(countdown.getTimeLeftInSeconds() < 60 && soundtrack.isPlaying()) soundtrack.stop();
     
     //if(redButtonMovie.getIsMovieDone() && !stages[0].done){
 
@@ -178,12 +179,10 @@ void ofApp::update(){
     //stages[2].active = true;
     //}
 
-    if(controls.joystickButton) { 
+    if(controls.button) {
 
-	ofLog()<<"joystick botton pressed";
-	controls.joystickButton = false;
-	ofVec2f joy = controls.getJoystickPosition();
-	keyboard.mousePressed(joy.x, joy.y);
+    ofLog()<<"joystick botton pressed";
+    keyboard.mousePressed(controls.activeKey);
 
     }
     
@@ -205,19 +204,19 @@ void ofApp::update(){
 
     //joystick & keyboard
    
-    if(frameCount % 30) { countdown.update();
-    axisX.update(controls.jX);
-    axisY.update(controls.jY);
-    }
+    countdown.update();
+    if(frameCount % 12 == 0) { axisX.update(controls.jX); }
+    if(frameCount % 12 == 6) { axisY.update(controls.jY); }
+    
 
     //graphs
-    if(frameCount % 10) { noise.update((controls.jX + 1) / (controls.jY + 1)); }
-    if(frameCount % 12) { horizontalGraph.update(countdown.getSeconds()); }
-    if(frameCount % 8) { verticalGraph.update(countdown.getMillis()); }
+    if(frameCount % 60 == 0) { noise.update((controls.jX + 1) / (controls.jY + 1)); }
+    if(frameCount % 60 == 30) { horizontalGraph.update(countdown.getSeconds()); }
+    if(frameCount % 60 == 15) { verticalGraph.update(countdown.getMillis()); }
     
     //radar & sphere3D update
-    radar.update();
-    sphere3D.update();
+    if(frameCount % 15 == 0) { radar.update(); }
+    if(frameCount % 30 == 10) { sphere3D.update(); }
 
     if(frameCount % 3 == 0) animCount++;
 
@@ -264,10 +263,10 @@ void ofApp::draw(){
     //ofDrawRectangle(joy.x, joy.y, 10, 10);
 
     if(stages[2].active){
-        
+
     interface->begin();
 
-    //ofClear(0, 255);
+    ofClear(0, 255);
     ofEnableAlphaBlending();
  
     uiState = 1;
@@ -304,10 +303,10 @@ void ofApp::draw(){
 
     ofVec2f joy = controls.getJoystickPosition();
 
-    keyboard.draw(joy.x, joy.y, soundtrack.isPlaying());
+    keyboard.draw(controls.activeKey, controls.button);
 
     ofSetColor(255, 255, 255, 255);
-    ofDrawBitmapString("joystick debouncing:" + ofToString(controls.debounceLimit) + ", sensitivity: " + ofToString(controls.joystickSensitivity), 48, 48);
+    //ofDrawBitmapString("fps:" + ofToString(ofGetFrameRate()) + ", active: " + ofToString(controls.activeKey), 48, 48);
 
     //joystick poiner
     //ofDrawRectangle(joy.x, joy.y - 7, 2, 16);
@@ -334,7 +333,7 @@ void ofApp::draw(){
     ofEnableAlphaBlending();
     background.draw(0, 0);
     
-    //map.draw();
+    map.draw();
         
     sat1.draw(); sat2.draw();
     axisX.draw(); axisY.draw();
@@ -376,9 +375,9 @@ void ofApp::draw(){
         ofEnableAlphaBlending();
         background.draw(0, 0);
         
-        //map.draw();
+        map.draw();
         
-         sat1.draw(); sat2.draw();
+        sat1.draw(); sat2.draw();
         axisX.draw(); axisY.draw();
         
         //radar & 3D sphere
@@ -427,6 +426,7 @@ void ofApp::setFalsePassword(){ ofLog()<<"SET TO 60"; falsePassword = 20; }
 void ofApp::youAreDefeated(){
     
     stages[1].active = false; stages[2].done = true; stages[3].active = true;
+
     soundtrack.setPaused(true);
     soundtrackPause = true;
     
@@ -435,13 +435,21 @@ void ofApp::youAreDefeated(){
 void ofApp::youWin(){
     
     stages[1].active = false; stages[2].done = true; stages[4].active = true;
-    soundtrack.setPaused(true);
-    soundtrackPause = true;
+
 
     //defconUI20
     record = (3550 - countdown.getTimeLeftInSeconds());
     //defconUI20
+
+    soundtrack.setPaused(true);
+    soundtrackPause = true;
     
+}
+
+bool ofApp::passwordBox(){
+
+  if(keyboard.INPUT2.size() > 0) { return true; } else { return false; }
+ 
 }
 
 void ofApp::volumeControl(float volume_){
@@ -453,6 +461,7 @@ void ofApp::volumeControl(float volume_){
         else  { soundtrack.setPaused(false); soundtrackPause = false; }
 
     }
+
 }
 
 bool ofApp::isSoundtrackPaused(){ return soundtrackPause; }

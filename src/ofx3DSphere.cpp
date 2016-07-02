@@ -35,28 +35,38 @@ void ofx3DSphere::inits(ofVec3f position_, int dimensions_) {
     }
     
     sprite = new ofFbo();
-    sprite->allocate(300, 300, GL_RGB );
+    sprite->allocate(300, 300, GL_RGBA );
 
 }
 
 
 void ofx3DSphere::update() {
+
+	
+	updated = true;
     
     
 }
 
 void ofx3DSphere::draw() {
-    
+
+    ofSetColor(125, 115, 5);
+
+    if(updated) { 
+
+    sprite->begin();
+    ofClear(255, 0);
+
     ofSetColor(255, 255, 255, 255);
     
     ofPushMatrix();
-    ofTranslate(position.x, position.y);
+    ofTranslate(150, 150);
     
     ofSetColor(0, 0, 0,64);
-    ofDrawEllipse(0, 0, dimensions, dimensions);
+    //ofDrawEllipse(0, 0, dimensions, dimensions);
     
     ofSetColor(16,41, 19, 192);
-    ofDrawEllipse(0, 0, dimensions - 8, dimensions - 8);
+    //ofDrawEllipse(0, 0, dimensions - 8, dimensions - 8);
     
 
     ofSetColor(124, 144, 24, 128);
@@ -77,6 +87,14 @@ void ofx3DSphere::draw() {
     }
 
     ofPopMatrix();
+
+    sprite->end();
+    updated = false;
+
+    }
+
+    sprite->draw(position.x - 150, position.y - 150);
+  
     
 }
 

@@ -34,4 +34,6 @@ public:
     
     float mark;
 
+    ofFbo* back;
+
 };

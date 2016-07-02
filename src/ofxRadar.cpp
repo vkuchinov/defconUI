@@ -23,6 +23,8 @@ void ofxRadar::inits(ofVec2f position_, int dimensions_) {
 
     highlight.load("assets/radarHighlight.png");
     
+    sprite = new ofFbo();
+    sprite->allocate(300, 300, GL_RGBA );
     
 }
 
@@ -42,19 +44,26 @@ void ofxRadar::update() {
 
     }
 
+    updated = true;
+
 }
 
 void ofxRadar::draw() {
-    
-    //ofSetColor(255, 255, 255, 255);
-    
+
+    ofSetColor(255, 255, 255, 255);
+
+    if(updated) { 
+
+    sprite->begin();
+    ofClear(255, 0);
+
     ofSetColor(0, 0, 0, 64);
     ofPushMatrix();
     ofSetCircleResolution(128);
-    ofTranslate(position.x, position.y);
-    ofDrawEllipse(0, 0, dimensions, dimensions);
+    ofTranslate(150, 150);
+    //ofDrawEllipse(0, 0, dimensions, dimensions);
     ofSetColor(16,41, 19, 192);
-    ofDrawEllipse(0, 0, dimensions - 8, dimensions - 8);
+    //ofDrawEllipse(0, 0, dimensions - 8, dimensions - 8);
     
     ofPushMatrix();
     
@@ -87,18 +96,28 @@ void ofxRadar::draw() {
     
     ofPopMatrix();
     
-    ofSetLineWidth(1.0);
-    ofSetColor(124, 144, 24, 128);
-    ofDrawLine(94, 0, 30, 0);
-    ofDrawLine(-94, 0, -30, 0);
-    ofDrawLine(0, 94, 0, 30);
-    ofDrawLine(0, -94, 0, -30);
+    //ofSetLineWidth(1.0);
+    //ofSetColor(124, 144, 24, 128);
+    //ofDrawLine(94, 0, 30, 0);
+    //ofDrawLine(-94, 0, -30, 0);
+    //ofDrawLine(0, 94, 0, 30);
+    //ofDrawLine(0, -94, 0, -30);
     
     ofNoFill();
-    ofDrawEllipse(0, 0, 94, 94);
-    ofDrawEllipse(0, 0, 180, 180);
+    //ofDrawEllipse(0, 0, 94, 94);
+    //ofDrawEllipse(0, 0, 180, 180);
     
     ofPopMatrix();
     
     theta += 4.0;
+
+    sprite->end();
+
+    updated = false;
+
+    }
+
+    sprite->draw(position.x - 150, position.y - 150);
+
+    
 }
